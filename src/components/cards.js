@@ -1,6 +1,3 @@
-import {cardTemplate, cardsContainer} from '../index.js';
-
-
 export const initialCards = [
     {
       name: "Архыз",
@@ -27,24 +24,3 @@ export const initialCards = [
       link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg",
     }
 ];
-
-export function createCard(card, deleteCard) {
-  const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
-
-  cardElement.querySelector('.card__title').textContent = card.name;
-
-  const cardImage = cardElement.querySelector('.card__image');
-
-  cardImage.src = card.link;
-  cardImage.alt = card.name;
-
-  const deleteButton = cardElement.querySelector(".card__delete-button");
-
-  deleteButton.addEventListener('click',function() {deleteCard(cardElement)});
-  
-  return cardElement;
-};
-
-export function deleteCard(cardElement) {
-  cardElement.remove();
-};
