@@ -1,24 +1,24 @@
 import './styles/index.css';
 import {initialCards} from './components/cards.js';
-import {createCard, deleteCard} from './components/card.js';
-import {closePopup, openPopup,} from './components/modal.js';
+import {cardsContainer, createCard, deleteCard} from './components/card.js';
+import {openPopup, 
+        closePopup, 
+        profileEditButton, 
+        profileEditPopup, 
+        addNewCardButton, 
+        newCardPopup, 
+        newCardPopupTextInput, 
+        newCardPopupUrlInput, 
+        popups, 
+        cardImagePopup, 
+        popupImage,
+        nameInputProfile,
+        jobInputProfile,
+        newCardForm,        
+        popupImageCaption} from './components/modal.js';
 
-export const profileEditButton = document.querySelector('.profile__edit-button');
-export const profileEditPopup = document.querySelector('.popup_type_edit');
-export const addNewCardButton = document.querySelector('.profile__add-button');
-export const newCardPopup = document.querySelector('.popup_type_new-card');
-export const newCardPopupTextInput = document.querySelector('.popup__input_type_card-name');
-export const newCardPopupUrlInput = document.querySelector('.popup__input_type_url');
-export const popups = document.querySelectorAll('.popup');
-export const cardImagePopup = document.querySelector('.popup_type_image');
-export const popupImage = cardImagePopup.querySelector('.popup__image');
-export const popupImageCaption = cardImagePopup.querySelector('.popup__caption');
-
-export const cardTemplate = document.querySelector('#card-template').content;
-export const cardsContainer = document.querySelector('.places__list');
-
-export const nameInputProfile = profileEditPopup.querySelector('.popup__input_type_name');
-export const jobInputProfile = profileEditPopup.querySelector('.popup__input_type_description');
+const profileTitle = document.querySelector('.profile__title');
+const profileDescription = document.querySelector('.profile__description');
 
 initialCards.forEach(function(card) {
     const cardElement = createCard(card, deleteCard);
@@ -27,14 +27,13 @@ initialCards.forEach(function(card) {
 
 profileEditButton.addEventListener('click', function() {
     openPopup(profileEditPopup);
-    nameInputProfile.value = document.querySelector('.profile__title').textContent;
-    jobInputProfile.value = document.querySelector('.profile__description').textContent;
+    nameInputProfile.value = profileTitle.textContent;
+    jobInputProfile.value = profileDescription.textContent;
 }); 
 
 addNewCardButton.addEventListener('click', function() {
     openPopup(newCardPopup);
-    newCardPopupTextInput.value = '';
-    newCardPopupUrlInput.value = '';
+    newCardForm.reset();
 });
 
 popups.forEach(function(popup) {
@@ -44,14 +43,6 @@ popups.forEach(function(popup) {
         }
     })
 })
-
-document.addEventListener('keydown', function(event) {
-    if (event.key === "Escape") {
-        closePopup(profileEditPopup);
-        closePopup(newCardPopup);
-        closePopup(cardImagePopup);
-    }
-});
 
 function handleProfileFormSubmit(event) {
     event.preventDefault();
@@ -64,7 +55,7 @@ profileEditPopup.addEventListener('submit', handleProfileFormSubmit);
 
 function handleNewCardSubmit(event) {
     event.preventDefault();
-    let newCard = {name: newCardPopupTextInput.value,
+    const newCard = {name: newCardPopupTextInput.value,
          link: newCardPopupUrlInput.value};
     const addNewCard = createCard(newCard, deleteCard);
     cardsContainer.prepend(addNewCard);
@@ -72,3 +63,10 @@ function handleNewCardSubmit(event) {
 } 
 
 newCardPopup.addEventListener('submit', handleNewCardSubmit);
+
+export function openImage(card) {    
+    popupImage.src = card.link;
+    popupImage.alt = card.name;    
+    popupImageCaption.textContent = card.name;    
+    openPopup(cardImagePopup);
+};    
