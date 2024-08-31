@@ -1,9 +1,5 @@
-import {openImage} from '../index.js';
-
-export const cardTemplate = document.querySelector('#card-template').content;
-export const cardsContainer = document.querySelector('.places__list');
-
-export function createCard(card, deleteCard) {
+export function createCard(card, deleteCard, openImage, likeCard) {
+    const cardTemplate = document.querySelector('#card-template').content;
     const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
   
     cardElement.querySelector('.card__title').textContent = card.name;
