@@ -1,46 +1,32 @@
 import './styles/index.css';
-import {initialCards} from './components/cards.js';
 import {createCard, deleteCard, likeCard} from './components/card.js';
 import {openPopup, closePopup, closePopupEsc} from './components/modal.js';
 import {enableValidation, clearValidation} from './components/validation.js';
 import {getUser, updateUser, getCards, addNewCard, updateAvatar} from './components/api.js';
-
-const cardsContainer = document.querySelector('.places__list');
-const popups = document.querySelectorAll('.popup');
-const formSelector = document.querySelector('.popup__form');
-const avatar = document.querySelector(".profile__image");
-
-const profileEditButton = document.querySelector('.profile__edit-button');
-const profileEditPopup = document.querySelector('.popup_type_edit');
-const inputProfileTitle = profileEditPopup.querySelector('.popup__input_type_name');
-const inputProfileDescription = profileEditPopup.querySelector('.popup__input_type_description');
-const profileTitle = document.querySelector('.profile__title');
-const profileDescription = document.querySelector('.profile__description');
-
-
-const addNewCardButton = document.querySelector('.profile__add-button');
-const newCardPopup = document.querySelector('.popup_type_new-card');
-const newCardForm = document.querySelector('[name="new-place"]');
-const newCardPopupTextInput = document.querySelector('.popup__input_type_card-name');
-const newCardPopupUrlInput = document.querySelector('.popup__input_type_url');
-
-const cardImagePopup = document.querySelector('.popup_type_image');
-const popupImage = cardImagePopup.querySelector('.popup__image');
-const popupImageCaption = cardImagePopup.querySelector('.popup__caption');
-
-const avatarForm = document.querySelector('[name="avatar"]');
-const avatarImage = document.querySelector('.profile__image');
-const avatarPopup = document.querySelector('.popup_type_avatar');
-const avatarPopupUrlInput = document.querySelector('.popup__input_type_url-avatar');
-
-const validationConfig = {
-    formSelector: '.popup__form',
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__button',
-    inactiveButtonClass: 'popup__button_disabled',
-    inputErrorClass: 'popup__input_type_error',
-    errorClass: 'popup__error_visible'
-};
+import {validationConfig,
+        cardsContainer,
+        popups,
+        formSelector,
+        avatar,
+        profileEditButton,
+        profileEditPopup,
+        inputProfileTitle,
+        inputProfileDescription,
+        profileTitle,
+        profileDescription,
+        addNewCardButton,
+        newCardPopup,
+        newCardForm,
+        newCardPopupTextInput,
+        newCardPopupUrlInput,
+        cardImagePopup,
+        popupImage,
+        popupImageCaption,
+        avatarForm,
+        avatarImage,
+        avatarPopup,
+        avatarPopupUrlInput,
+        cardTemplate} from './components/constants.js';
 
 Promise.all([getUser(), getCards()])
     .then(([data, cards]) => {
@@ -58,24 +44,30 @@ Promise.all([getUser(), getCards()])
         console.error('Ошибка:', err);
     });
 
-profileEditButton.addEventListener('click', function() {
+function profileEdit() {
     openPopup(profileEditPopup);
     inputProfileTitle.value = profileTitle.textContent;
     inputProfileDescription.value = profileDescription.textContent;
-    clearValidation(formSelector);
-}); 
+    clearValidation(profileEditPopup, validationConfig);
+}; 
+   
+profileEditButton.addEventListener('click', profileEdit); 
 
-addNewCardButton.addEventListener('click', function() {
+function addCard() {
     openPopup(newCardPopup);
     newCardForm.reset();
-    clearValidation(formSelector);
-});
+    clearValidation(newCardPopup, validationConfig);
+};
 
-avatarImage.addEventListener('click', function() {
+addNewCardButton.addEventListener('click', addCard);
+
+function avatarEdit() {
     openPopup(avatarPopup);
     avatarForm.reset();
-    clearValidation(formSelector);
-});
+    clearValidation(avatarPopup, validationConfig);
+};
+
+avatarImage.addEventListener('click', avatarEdit);
 
 popups.forEach(function(popup) {
     popup.addEventListener('click', function(event) {
@@ -114,7 +106,7 @@ function handleNewCardSubmit(event) {
     addNewCard(name, link)
         .then(function(card) {
             cardsContainer.prepend(
-                createCard(card, deleteCard, openImage, likeCard)
+                createCard(card, deleteCard, openImage, likeCard, card.owner._id)
             );
             closePopup(newCardPopup);
         })

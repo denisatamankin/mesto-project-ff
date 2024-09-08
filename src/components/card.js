@@ -1,7 +1,7 @@
 import {addLike, removeLike, deleteCardRequest} from "./api.js";
+import { cardTemplate } from "./constants.js";
 
-export function createCard(card, deleteCard, openImage, likeCard, userId) {
-    const cardTemplate = document.querySelector('#card-template').content;
+export function createCard(card, deleteCard, openImage, likeCard, userId) {    
     const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
   
     cardElement.querySelector('.card__title').textContent = card.name;
@@ -63,5 +63,8 @@ export function likeCard(cardId, likeButton, likeCount) {
                 likeCount.textContent = card.likes.length;
                 likeButton.classList.remove('card__like-button_is-active');
             })
+            .catch(function(error) {
+                console.log(error);                
+            });
     }
 };

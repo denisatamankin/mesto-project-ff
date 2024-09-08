@@ -1,10 +1,4 @@
-const config = {
-    baseUrl: 'https://nomoreparties.co/v1/wff-cohort-21',
-    headers: {
-        authorization: ' c6362043-f590-45f1-bd8d-ce03cdfd9a11',
-        'Content-Type': 'application/json'
-      }
-};
+import {config} from './constants.js';
 
 function handleResponse(response) {
     if (response.ok) {
